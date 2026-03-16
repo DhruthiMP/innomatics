@@ -195,7 +195,7 @@ class OrderItem(BaseModel):
 class BulkOrder(BaseModel):
     company_name: str = Field(..., min_length=2)
     contact_email: str = Field(..., min_length=5)
-    items: List[OrderItem]
+    items: List[OrderItem]=Field(..., min_items=1)
 
 @app.post("/orders/bulk")
 def bulk_order(order: BulkOrder):
