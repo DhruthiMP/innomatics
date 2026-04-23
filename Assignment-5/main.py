@@ -101,6 +101,11 @@ def search_products(
         p for p in products
         if keyword.lower() in p['name'].lower()
     ]
+    # This single line is the entire search logic: if keyword.lower() in p['name'].lower() 
+    # keyword.lower() → converts what user typed to lowercase 
+    # p['name'].lower() → converts product name to lowercase 
+    # 'in' → checks if keyword appears anywhere inside the name
+    # So 'MOUSE', 'Mouse', 'mouse' all match 'Wireless Mouse'
     if not results:
         return {'message': f'No products found for: {keyword}', 'results': []}
     return {
@@ -126,6 +131,11 @@ def sort_products(
         'order':    order,
         'products': sorted_products,
     }
+# reverse=True → highest first (desc) 
+# reverse=False → lowest first (asc) reverse = (order == 'desc') 
+# True if desc, False if asc # key=lambda p: p[sort_by] 
+# means: compare products by the value in p['price'] or p['name']
+# 'category' is not in the allowed list so it gets rejected first
 
 # ── Day 6 — Step 23: Pagination ───────────────────────────────────
 @app.get('/products/page')
@@ -143,6 +153,13 @@ def get_products_paged(
         'total_pages': -(-len(products) // limit),   # ceiling division
         'products':    paged,
     }
+# Page 1, limit 2: start = (1-1)*2 = 0 → products[0:2] 
+# Page 2, limit 2: start = (2-1)*2 = 2 → products[2:4] 
+# Page 3, limit 2: start = (3-1)*2 = 6 → products[6:8] = [] 
+# total_pages uses ceiling division: 
+# 4 items ÷ 2 per page = 2 pages (exactly) 
+# 5 items ÷ 2 per page = 3 pages (rounds up) 
+# Formula: -(-len(products) // limit)
 
 # ── Day 4 — CRUD ──────────────────────────────────────────────────
 # Variable route /{product_id} — always AFTER all fixed routes
